@@ -68,7 +68,9 @@ public class NoteboardManager : MonoBehaviour
         var newNote = noteList.Dequeue();
         newNote.gameObject.SetActive(true);
         int columnIndex = Random.Range(0, numberOfColumns );
-        float distanceBetweenColumns = (1.0f / (numberOfColumns - 1));
+        int columnCount = numberOfColumns - 1;
+        if (columnCount == 0) columnCount = 1; //can't divide by 0
+        float distanceBetweenColumns = (1.0f / columnCount);
         float lerpAmount = distanceBetweenColumns * columnIndex; 
         Vector3 spawnPos = Vector3.Lerp(farSpawn.position, closeSpawn.position, lerpAmount);
         newNote.Drop(spawnPos);

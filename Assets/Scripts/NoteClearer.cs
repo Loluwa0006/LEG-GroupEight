@@ -9,6 +9,16 @@ public class NoteClearer : MonoBehaviour
 
     KeyCode button = KeyCode.Escape;
 
+
+    //Using ints to measure by frame for precision
+    [SerializeField] int perfectDuration = 8; 
+    [SerializeField] int perfectCooldown = 45; // to prevent mashing
+
+    int perfectPlayTracker = 0;
+    int cooldownTracker = 0;
+
+    bool playing = false;
+    bool playedNotePerfectly = false;
     private void Awake()
     {
         if (detector == null)
@@ -48,18 +58,77 @@ public class NoteClearer : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
+       
         if (other.TryGetComponent(out NoteEntity note))
         {
-            manager.OnNoteFailed(note);
+            if (!playing)
+            {
+                manager.OnNoteFailed(note);
+                return;
+            }
+            else if (PlayedPerfect() && !PerfectPlayOnCooldown())
+            {
+                Debug.Log("Played note perfectly");
+                cooldownTracker = 0;
+                playedNotePerfectly = true;
+            }
+            else
+            {
+                Debug.Log("Played note normally");
+            }
+            manager.OnNoteSuccessful(note);
         }
     }
 
     private void Update()
     {
-        if (button != KeyCode.Escape)
+       if (Input.GetKeyDown(button))
         {
-            detector.enabled = !Input.GetKey(button);
-            mesh.enabled = detector.enabled;
+            OnButtonDown();
         }
+       if (Input.GetKeyUp(button))
+        {
+            OnButtonReleased();
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        if (perfectPlayTracker > 0)
+        {
+            perfectPlayTracker--;
+        }
+        if (cooldownTracker > 0)
+        {
+            cooldownTracker--;
+        }
+
+        if (button == KeyCode.A)
+        {
+            Debug.Log("Perfect play tracker is " + perfectPlayTracker);
+            Debug.Log("Cooldown tracker is " + cooldownTracker);
+        }
+    }
+
+    void OnButtonDown()
+    {
+        playing = true;
+        mesh.enabled = false;
+        perfectPlayTracker = perfectDuration;
+    }
+    void OnButtonReleased()
+    {
+        mesh.enabled = true;
+        playing = false;
+        if (!playedNotePerfectly) cooldownTracker = perfectCooldown;
+        playedNotePerfectly = false;
+    }
+    public bool PlayedPerfect()
+    {
+        return perfectPlayTracker > 0;
+    }
+    public bool PerfectPlayOnCooldown()
+    {
+        return cooldownTracker > 0;
     }
 }

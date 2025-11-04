@@ -1144,7 +1144,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1668933874
 Transform:
   m_ObjectHideFlags: 0
@@ -1154,7 +1154,7 @@ Transform:
   m_GameObject: {fileID: 1668933873}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -28.87}
+  m_LocalPosition: {x: 0, y: 0, z: -26.04}
   m_LocalScale: {x: 25, y: 5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1436,7 +1436,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4ffe7579d1ff6e4ba1e902fca4bb7b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NoteboardManager
-  numberOfColumns: 4
+  numberOfColumns: 2
   notePrefab: {fileID: 7518104305190770661, guid: 87990d766d3442d46996bfb503b3e1e4, type: 3}
   clearerPrefab: {fileID: 195064154086624130, guid: 3fef3f81be99ab747b85749fbded4e13, type: 3}
   noteboardObject: {fileID: 2073756362}
