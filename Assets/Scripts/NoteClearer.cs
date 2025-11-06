@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class NoteClearer : MonoBehaviour
 {
@@ -7,8 +8,9 @@ public class NoteClearer : MonoBehaviour
     [SerializeField] Collider detector;
     [SerializeField] MeshRenderer mesh;
     [SerializeField] ParticleSystem perfectPlayParticles;
+    [SerializeField] PlayerInput playerInput;
 
-    KeyCode button = KeyCode.Escape;
+    InputAction button;
 
 
     //Using ints to measure by frame for precision
@@ -32,6 +34,10 @@ public class NoteClearer : MonoBehaviour
             mesh = GetComponent<MeshRenderer>();
         }
 
+        if (playerInput == null)
+        {
+            playerInput = GetComponent<PlayerInput>();
+        }
         var main = perfectPlayParticles.main;
             
         main.loop = false;
@@ -46,16 +52,16 @@ public class NoteClearer : MonoBehaviour
         switch (index)
         {
             case 0:
-                button = KeyCode.F;
+                button = playerInput.actions["NoteOne"];
                 break;
             case 1:
-                button = KeyCode.D;
+                button = playerInput.actions["NoteTwo"];
                 break;
             case 2:
-                button = KeyCode.S;
+                button = playerInput.actions["NoteThree"];
                 break;
             case 3:
-                button = KeyCode.A;
+                button = playerInput.actions["NoteFour"];
                 break;
             default:
                 Debug.Log("Don't have button for index " + index);
@@ -93,11 +99,11 @@ public class NoteClearer : MonoBehaviour
 
     private void Update()
     {
-       if (Input.GetKeyDown(button))
+       if (button.WasPerformedThisFrame())
         {
             OnButtonDown();
         }
-       if (Input.GetKeyUp(button))
+       if (button.WasReleasedThisFrame())
         {
             OnButtonReleased();
         }
@@ -114,11 +120,7 @@ public class NoteClearer : MonoBehaviour
             cooldownTracker--;
         }
 
-        if (button == KeyCode.A)
-        {
-            Debug.Log("Perfect play tracker is " + perfectPlayTracker);
-            Debug.Log("Cooldown tracker is " + cooldownTracker);
-        }
+    
     }
 
     void OnButtonDown()

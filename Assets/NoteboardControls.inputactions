@@ -1,0 +1,135 @@
+{
+    "version": 1,
+    "name": "NoteboardControls",
+    "maps": [
+        {
+            "name": "Concert",
+            "id": "d47adb3d-57f5-4c98-b87e-48c36b5f8b3f",
+            "actions": [
+                {
+                    "name": "NoteOne",
+                    "type": "Button",
+                    "id": "9b0afa15-dfcd-416b-8b87-4f2d11c39a08",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "NoteTwo",
+                    "type": "Button",
+                    "id": "1a80ee6d-47ea-412f-9bd0-78ea03fb207a",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "NoteThree",
+                    "type": "Button",
+                    "id": "a269b04c-ac4e-4c90-8e50-34e863557967",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "NoteFour",
+                    "type": "Button",
+                    "id": "15b5219a-7d60-49c2-966c-002709b54b89",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "StrumLeft",
+                    "type": "Button",
+                    "id": "9414a429-7eb3-4ad6-9119-9cb823e4f309",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "StrumRight",
+                    "type": "Button",
+                    "id": "73efdd9c-ed50-4369-bcbf-5fdf75a645f1",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "593c7214-16c4-41a2-beb1-e0af98aa1945",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "NoteOne",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "48abb5da-881a-462f-befa-a48a7da60864",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "NoteTwo",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "738523de-3ab0-4943-b679-6ce5c6dc2b5b",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "NoteThree",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "882a7d0e-a1f7-4b7c-9b37-2056792adcda",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "NoteFour",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5cb87569-9bd8-4c7c-ab1f-07a2fbe6f23b",
+                    "path": "<Keyboard>/j",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "StrumLeft",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "766af9f0-5583-465c-aa35-f42ffda8f5c7",
+                    "path": "<Keyboard>/k",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "StrumRight",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
