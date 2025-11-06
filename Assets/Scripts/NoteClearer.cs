@@ -6,6 +6,7 @@ public class NoteClearer : MonoBehaviour
     [SerializeField] NoteboardManager manager;
     [SerializeField] Collider detector;
     [SerializeField] MeshRenderer mesh;
+    [SerializeField] ParticleSystem perfectPlayParticles;
 
     KeyCode button = KeyCode.Escape;
 
@@ -30,6 +31,12 @@ public class NoteClearer : MonoBehaviour
         {
             mesh = GetComponent<MeshRenderer>();
         }
+
+        var main = perfectPlayParticles.main;
+            
+        main.loop = false;
+
+        perfectPlayParticles.Stop();
   
     }
     public void InitClearer(NoteboardManager manager, int index)
@@ -71,12 +78,16 @@ public class NoteClearer : MonoBehaviour
                 Debug.Log("Played note perfectly");
                 cooldownTracker = 0;
                 playedNotePerfectly = true;
+                perfectPlayParticles.Play();
+                manager.OnNoteSuccessful(note, true);
+
             }
             else
             {
                 Debug.Log("Played note normally");
+                manager.OnNoteSuccessful(note, false);
+
             }
-            manager.OnNoteSuccessful(note);
         }
     }
 

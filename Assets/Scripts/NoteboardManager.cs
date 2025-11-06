@@ -1,11 +1,13 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class NoteboardManager : MonoBehaviour
 {
 
     public const int NOTE_POOL_SIZE = 25;
+
 
     [SerializeField] int numberOfColumns = 4;
     [Header("Prefabs")]
@@ -19,6 +21,7 @@ public class NoteboardManager : MonoBehaviour
     [Header("UI")]
     [SerializeField] TMP_Text streakTracker;
     [SerializeField] TMP_Text scoreTracker;
+    [SerializeField] UIManager uiManager;
 
 
 
@@ -80,13 +83,15 @@ public class NoteboardManager : MonoBehaviour
     {
         UpdateStreak(true);
         ResetNote(note);
+        uiManager.OnNoteMissed(note);
     }
 
-    public void OnNoteSuccessful(NoteEntity note)
+    public void OnNoteSuccessful(NoteEntity note, bool isPerfect)
     {
         UpdateScore(note.value);
         UpdateStreak(false);
         ResetNote(note);
+        uiManager.OnNotePlayed(note, isPerfect);
     }
 
     void ResetNote(NoteEntity note)

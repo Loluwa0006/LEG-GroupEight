@@ -7,6 +7,6 @@ public class ScoreEarner : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (!other.TryGetComponent(out NoteEntity note)) { return; }
-        manager.OnNoteSuccessful(note);
+       // manager.OnNoteSuccessful(note);
     }
 }
