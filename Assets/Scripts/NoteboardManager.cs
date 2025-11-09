@@ -22,6 +22,7 @@ public class NoteboardManager : MonoBehaviour
 
     [SerializeField] Transform clearerRotator;
     [SerializeField] Transform staff;
+    [SerializeField] Transform rotator;
 
 
 
@@ -81,6 +82,7 @@ public class NoteboardManager : MonoBehaviour
         float lerpAmount = distanceBetweenColumns * columnIndex;
         Vector3 spawnPos = Vector3.Lerp(farSpawn.position, closeSpawn.position, lerpAmount);
         newNote.Drop(spawnPos);
+        newNote.transform.SetLocalPositionAndRotation(newNote.transform.localPosition, Quaternion.Euler(0, rotator.localEulerAngles.y, 0));
     }
 
     public void OnNoteFailed(NoteEntity note)

@@ -1637,6 +1637,7 @@ MonoBehaviour:
   scoreTracker: {fileID: 2055831477}
   clearerRotator: {fileID: 388345553}
   staff: {fileID: 2059801722}
+  rotator: {fileID: 1838118952}
   minCooldown: 0.3
   maxCooldown: 1
 --- !u!1 &1838118951
