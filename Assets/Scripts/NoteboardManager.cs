@@ -20,6 +20,9 @@ public class NoteboardManager : MonoBehaviour
     [SerializeField] TMP_Text streakTracker;
     [SerializeField] TMP_Text scoreTracker;
 
+    [SerializeField] Transform clearerRotator;
+    [SerializeField] Transform staff;
+
 
 
 
@@ -32,25 +35,31 @@ public class NoteboardManager : MonoBehaviour
 
     int score = 0;
     int streak = 0;
+
     private void Awake()
     {
         for (int i = 0; i < NOTE_POOL_SIZE; i++)
         {
-            NoteEntity newNote = Instantiate(notePrefab);
+            NoteEntity newNote = Instantiate(notePrefab, staff);
             noteList.Enqueue(newNote);
             newNote.InitNote(this);
             newNote.gameObject.SetActive(false);
         }
+
         float distanceBetweenColumns = (1.0f / (numberOfColumns - 1));
-        for (int i = 0; i < numberOfColumns;i++)
+
+        for (int i = 0; i < numberOfColumns; i++)
         {
-            NoteClearer newClearer = Instantiate(clearerPrefab);
-            newClearer.InitClearer(this, i);   
+            Debug.Log($"Loop {i} in clearerspawner");
+            NoteClearer newClearer = Instantiate(clearerPrefab, clearerRotator);
+            newClearer.InitClearer(this, i);
             float lerpAmount = distanceBetweenColumns * i;
             Vector3 spawnPoint = Vector3.Lerp(farSpawn.position, closeSpawn.position, lerpAmount);
-            spawnPoint.z = clearerSpawn.position.z;
+            //spawnPoint.z = clearerSpawn.position.z;
             newClearer.transform.position = spawnPoint;
         }
+
+        clearerRotator.transform.Rotate(0, 170, 0);
     }
 
     private void Update()
@@ -67,9 +76,9 @@ public class NoteboardManager : MonoBehaviour
     {
         var newNote = noteList.Dequeue();
         newNote.gameObject.SetActive(true);
-        int columnIndex = Random.Range(0, numberOfColumns );
+        int columnIndex = Random.Range(0, numberOfColumns);
         float distanceBetweenColumns = (1.0f / (numberOfColumns - 1));
-        float lerpAmount = distanceBetweenColumns * columnIndex; 
+        float lerpAmount = distanceBetweenColumns * columnIndex;
         Vector3 spawnPos = Vector3.Lerp(farSpawn.position, closeSpawn.position, lerpAmount);
         newNote.Drop(spawnPos);
     }

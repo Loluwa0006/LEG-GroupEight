@@ -22,8 +22,6 @@ public class NoteEntity : MonoBehaviour
     public void Drop(Vector3 startingPoint)
     {
         transform.position = startingPoint;
-        rb.linearVelocity = new Vector3(0, 0, fallSpeed);
+        //rb.linearVelocity = new Vector3(0, 0, fallSpeed);
     }
-
-
 }

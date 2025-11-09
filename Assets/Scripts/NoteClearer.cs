@@ -29,15 +29,18 @@ public class NoteClearer : MonoBehaviour
         switch (index)
         {
             case 0:
-                button = KeyCode.F;
+                button = KeyCode.G;
                 break;
             case 1:
-                button = KeyCode.D;
+                button = KeyCode.F;
                 break;
             case 2:
-                button = KeyCode.S;
+                button = KeyCode.D;
                 break;
             case 3:
+                button = KeyCode.S;
+                break;
+            case 4:
                 button = KeyCode.A;
                 break;
             default:
