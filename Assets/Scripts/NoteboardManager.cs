@@ -12,6 +12,7 @@ public class NoteboardManager : MonoBehaviour
     [SerializeField] int numberOfColumns = 4;
     [Header("Prefabs")]
     [SerializeField] NoteEntity notePrefab;
+    [SerializeField] FalseNoteEntity falseNotePrefab;
     [SerializeField] NoteClearer clearerPrefab;
     [SerializeField] GameObject noteboardObject;
     [Header("Spawn Points")]
@@ -25,13 +26,19 @@ public class NoteboardManager : MonoBehaviour
 
 
 
+    [Header("Default Note")]
+    [SerializeField] float defaultNoteMinCooldown = 0.1f;
+    [SerializeField] float defaultNoteMaxCooldown = 0.2f;
 
-    [SerializeField] float minCooldown = 0.1f;
-    [SerializeField] float maxCooldown = 0.2f;
+    [Header("False Note")]
+    [SerializeField] float falseNoteMinCooldown = 0.6f;
+    [SerializeField] float falseNoteMaxCooldown = 0.7f;
 
-    float cooldownTracker = 0.0f;
+    float baseNotecooldownTracker = 0.0f;
+    float falseNoteCooldownTracker = 0.0f;
 
     Queue<NoteEntity> noteList = new();
+    List<FalseNoteEntity> activeFalseNotes = new();
 
     int score = 0;
     int streak = 0;
@@ -58,12 +65,20 @@ public class NoteboardManager : MonoBehaviour
 
     private void Update()
     {
-        if (cooldownTracker <= 0.0f)
+        if (baseNotecooldownTracker <= 0.0f)
         {
-            cooldownTracker = Random.Range(minCooldown, maxCooldown);
+            baseNotecooldownTracker = Random.Range(defaultNoteMinCooldown, defaultNoteMaxCooldown);
             CreateNewNote();
         }
-        cooldownTracker -= Time.deltaTime;
+        if (falseNoteCooldownTracker <= 0.0f)
+        {
+            falseNoteCooldownTracker = Random.Range(falseNoteMinCooldown, falseNoteMaxCooldown);
+            CreateNewFalseNote();
+            Debug.Log("making false note");
+        }
+
+        baseNotecooldownTracker -= Time.deltaTime;
+        falseNoteCooldownTracker -= Time.deltaTime;
     }
 
     void CreateNewNote()
@@ -79,11 +94,46 @@ public class NoteboardManager : MonoBehaviour
         newNote.Drop(spawnPos);
     }
 
-    public void OnNoteFailed(NoteEntity note)
+    void CreateNewFalseNote()
+    {
+        int columnCount = numberOfColumns - 1;
+        if (columnCount == 0) columnCount = 1; //can't divide by 0
+        float distanceBetweenColumns = (1.0f / columnCount);
+        int dir = Random.Range(0, 2);
+        Vector3 spawnPos;
+        int strumDir;
+        if (dir == 1)
+        {
+            spawnPos = Vector3.LerpUnclamped(farSpawn.position, closeSpawn.position, -0.25f);
+            strumDir = -1;
+        }
+        else
+        {
+            spawnPos = Vector3.LerpUnclamped(farSpawn.position, closeSpawn.position, 1.25f);
+            strumDir = 1;
+
+        }
+        FalseNoteEntity falseNote = Instantiate(falseNotePrefab);
+        falseNote.transform.position = spawnPos;
+        falseNote.Drop(spawnPos);
+        activeFalseNotes.Add(falseNote);
+        falseNote.strumDirection = strumDir;
+
+    }
+
+public void OnNoteFailed(NoteEntity note)
     {
         UpdateStreak(true);
         ResetNote(note);
         uiManager.OnNoteMissed(note);
+        if (note.TryGetComponent(out FalseNoteEntity falseNote))
+        {
+            if (activeFalseNotes.Contains(falseNote))
+            {
+                activeFalseNotes.Remove(falseNote);
+                Destroy(falseNote.gameObject);
+            }
+        }
     }
 
     public void OnNoteSuccessful(NoteEntity note, bool isPerfect)
@@ -92,6 +142,16 @@ public class NoteboardManager : MonoBehaviour
         UpdateStreak(false);
         ResetNote(note);
         uiManager.OnNotePlayed(note, isPerfect);
+
+        
+        if (note.TryGetComponent(out FalseNoteEntity falseNote))
+        {
+            if (activeFalseNotes.Contains(falseNote))
+            {
+                activeFalseNotes.Remove(falseNote);
+                Destroy(falseNote.gameObject);
+            }
+        }
     }
 
     void ResetNote(NoteEntity note)
@@ -118,6 +178,37 @@ public class NoteboardManager : MonoBehaviour
     {
         score += 1;
         scoreTracker.text = "Score: " + score.ToString();
+    }
+
+   
+    public void StrumLeft()
+    {
+        Debug.Log("Strumming Left");
+      
+        foreach (var falseNote in activeFalseNotes)
+        {
+            if (falseNote. strumDirection == -1)
+            {
+                Vector3 newPos = falseNote.transform.position;
+                newPos.x = farSpawn.transform.position.x;
+                falseNote.transform.position = newPos;
+            }
+        }
+    }
+
+    public void StrumRight()
+    {
+        Debug.Log("Strumming Right");
+       
+        foreach (var falseNote in activeFalseNotes)
+        {
+            if (falseNote.strumDirection == 1)
+            {
+                Vector3 newPos = falseNote.transform.position;
+                newPos.x = closeSpawn.transform.position.x;
+                falseNote.transform.position = newPos;
+            }
+        }
     }
 
 }

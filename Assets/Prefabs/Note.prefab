@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2162901596759239509}
   - component: {fileID: 7518104305190770661}
   - component: {fileID: 8608699900489240188}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Note
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -126,6 +126,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NoteEntity
   rb: {fileID: 8608699900489240188}
+  value: 1
   fallSpeed: 35
 --- !u!54 &8608699900489240188
 Rigidbody:

@@ -1613,6 +1613,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::NoteboardManager
   numberOfColumns: 4
   notePrefab: {fileID: 7518104305190770661, guid: 87990d766d3442d46996bfb503b3e1e4, type: 3}
+  falseNotePrefab: {fileID: 412096277586447192, guid: ab2703142e9ba924fb3b00a3e03794b8, type: 3}
   clearerPrefab: {fileID: 195064154086624130, guid: 3fef3f81be99ab747b85749fbded4e13, type: 3}
   noteboardObject: {fileID: 2073756362}
   farSpawn: {fileID: 1840589921}
@@ -1621,8 +1622,10 @@ MonoBehaviour:
   streakTracker: {fileID: 512833088}
   scoreTracker: {fileID: 1630909866}
   uiManager: {fileID: 778351948}
-  minCooldown: 0.4
-  maxCooldown: 0.7
+  defaultNoteMinCooldown: 0.5
+  defaultNoteMaxCooldown: 0.7
+  falseNoteMinCooldown: 0.6
+  falseNoteMaxCooldown: 0.7
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

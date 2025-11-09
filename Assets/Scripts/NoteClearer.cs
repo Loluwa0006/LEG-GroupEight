@@ -19,9 +19,11 @@ public class NoteClearer : MonoBehaviour
 
     int perfectPlayTracker = 0;
     int cooldownTracker = 0;
+    int index = 0;
 
     bool playing = false;
     bool playedNotePerfectly = false;
+    
     private void Awake()
     {
         if (detector == null)
@@ -48,6 +50,7 @@ public class NoteClearer : MonoBehaviour
     public void InitClearer(NoteboardManager manager, int index)
     {
         this.manager = manager;
+        this.index = index;
 
         switch (index)
         {
@@ -106,6 +109,18 @@ public class NoteClearer : MonoBehaviour
        if (button.WasReleasedThisFrame())
         {
             OnButtonReleased();
+        }
+
+       if (index == 0) //only one clearer should do this, otherwise we call the function up to 3 extra times for no reason
+        {
+            if (playerInput.actions["StrumLeft"].WasPerformedThisFrame())
+            {
+                manager.StrumLeft();
+            }
+            else if (playerInput.actions["StrumRight"].WasPerformedThisFrame())
+            {
+                manager.StrumRight();
+            }
         }
     }
 
