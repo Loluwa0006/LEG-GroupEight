@@ -22,8 +22,6 @@ public class NoteboardManager : MonoBehaviour
     [SerializeField] Transform closeSpawn;
     [SerializeField] Transform clearerSpawn;
     [Header("UI")]
-    [SerializeField] TMP_Text streakTracker;
-    [SerializeField] TMP_Text scoreTracker;
     [SerializeField] UIManager uiManager;
 
     [SerializeField] Transform clearerRotator;
@@ -74,6 +72,7 @@ public class NoteboardManager : MonoBehaviour
             float lerpAmount = distanceBetweenColumns * i;
             Vector3 spawnPoint = Vector3.Lerp(farSpawn.position, closeSpawn.position, lerpAmount);
             newClearer.transform.position = spawnPoint;
+            newClearer.onFailedPlay.AddListener(uiManager.OnStreakLost);
         }
 
         clearerRotator.transform.Rotate(0, 170, 0);
@@ -163,7 +162,6 @@ public class NoteboardManager : MonoBehaviour
 
     public void OnNoteFailed(NoteEntity note)
     {
-        UpdateStreak(true);
         ResetNote(note);
         uiManager.OnNoteMissed(note);
         if (note.TryGetComponent(out FalseNoteEntity falseNote))
@@ -178,8 +176,7 @@ public class NoteboardManager : MonoBehaviour
 
     public void OnNoteSuccessful(NoteEntity note, bool isPerfect)
     {
-        UpdateScore(note.value);
-        UpdateStreak(false);
+
         ResetNote(note);
         uiManager.OnNotePlayed(note, isPerfect);
 
@@ -201,24 +198,6 @@ public class NoteboardManager : MonoBehaviour
         note.gameObject.SetActive(false);
     }
 
-    public void UpdateStreak(bool reset)
-    {
-        if (reset)
-        {
-            streak = 0;
-        }
-        else
-        {
-            streak += 1;
-        }
-        streakTracker.text = "Streak: " + streak.ToString();
-    }
-
-    public void UpdateScore(int amount)
-    {
-        score += 1;
-        scoreTracker.text = "Score: " + score.ToString();
-    }
 
 
     public void StrumLeft()

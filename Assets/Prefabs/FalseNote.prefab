@@ -1,5 +1,67 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &223058283580090351
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 3714679647708937647}
+    m_Modifications:
+    - target: {fileID: 2835552977663837417, guid: 0399bde61eb82894da1df520adb1f3c2, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2835552977663837417, guid: 0399bde61eb82894da1df520adb1f3c2, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2835552977663837417, guid: 0399bde61eb82894da1df520adb1f3c2, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2835552977663837417, guid: 0399bde61eb82894da1df520adb1f3c2, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 2835552977663837417, guid: 0399bde61eb82894da1df520adb1f3c2, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2835552977663837417, guid: 0399bde61eb82894da1df520adb1f3c2, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 2835552977663837417, guid: 0399bde61eb82894da1df520adb1f3c2, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2835552977663837417, guid: 0399bde61eb82894da1df520adb1f3c2, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2835552977663837417, guid: 0399bde61eb82894da1df520adb1f3c2, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 2835552977663837417, guid: 0399bde61eb82894da1df520adb1f3c2, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4541792221502082704, guid: 0399bde61eb82894da1df520adb1f3c2, type: 3}
+      propertyPath: m_Name
+      value: FalseTrail
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 0399bde61eb82894da1df520adb1f3c2, type: 3}
+--- !u!4 &2612543236627735302 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2835552977663837417, guid: 0399bde61eb82894da1df520adb1f3c2, type: 3}
+  m_PrefabInstance: {fileID: 223058283580090351}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2555554233039859846
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -58,8 +120,12 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: af45c44ff06c0fd4f86509f7aac6d82a, type: 2}
     m_RemovedComponents:
     - {fileID: 7518104305190770661, guid: 6e57ddcb4e94347438893a43abb92d22, type: 3}
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 2643818720460502417, guid: 6e57ddcb4e94347438893a43abb92d22, type: 3}
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 1223314977604390185, guid: 6e57ddcb4e94347438893a43abb92d22, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2612543236627735302}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 1170684424229106159, guid: 6e57ddcb4e94347438893a43abb92d22, type: 3}
       insertIndex: -1
@@ -86,6 +152,11 @@ MonoBehaviour:
   value: 1
   fallSpeed: 1
   strumDirection: 0
+--- !u!4 &3714679647708937647 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1223314977604390185, guid: 6e57ddcb4e94347438893a43abb92d22, type: 3}
+  m_PrefabInstance: {fileID: 2555554233039859846}
+  m_PrefabAsset: {fileID: 0}
 --- !u!54 &6057088585940352762 stripped
 Rigidbody:
   m_CorrespondingSourceObject: {fileID: 8608699900489240188, guid: 6e57ddcb4e94347438893a43abb92d22, type: 3}
