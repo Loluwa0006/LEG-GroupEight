@@ -1,6 +1,10 @@
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
+using UnityEditor.ShaderGraph.Serialization;
 using UnityEngine;
+
 
 public class NoteboardManager : MonoBehaviour
 {
@@ -39,8 +43,13 @@ public class NoteboardManager : MonoBehaviour
     float baseNotecooldownTracker = 0.0f;
     float falseNoteCooldownTracker = 0.0f;
 
+    [SerializeField] float audioStartDelayInSeconds;
+    [SerializeField] float bpm;
+    Queue<float> noteValuesInQuarterNotes = new Queue<float>(new[] { 1f, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 2 });
     Queue<NoteEntity> noteList = new();
     List<FalseNoteEntity> activeFalseNotes = new();
+    float spawnCooldown = 0f;
+    AudioSource audioSource;
 
     int score = 0;
     int streak = 0;
@@ -68,10 +77,15 @@ public class NoteboardManager : MonoBehaviour
         }
 
         clearerRotator.transform.Rotate(0, 170, 0);
+
+        audioSource = GetComponent<AudioSource>();
+
+        StartCoroutine(audioStartDelay());
     }
 
     private void Update()
     {
+        /*
         if (baseNotecooldownTracker <= 0.0f)
         {
             baseNotecooldownTracker = Random.Range(defaultNoteMinCooldown, defaultNoteMaxCooldown);
@@ -86,6 +100,24 @@ public class NoteboardManager : MonoBehaviour
 
         baseNotecooldownTracker -= Time.deltaTime;
         falseNoteCooldownTracker -= Time.deltaTime;
+        */
+
+        spawnCooldown -= Time.deltaTime;
+
+        if (spawnCooldown <= 0f)
+        {
+            if (noteValuesInQuarterNotes.Count > 0)
+            {
+                CreateNewNote();
+                spawnCooldown = 60 / bpm * noteValuesInQuarterNotes.Dequeue();
+            }
+        }
+    }
+
+    IEnumerator audioStartDelay()
+    {
+        yield return new WaitForSeconds(audioStartDelayInSeconds);
+        audioSource.Play();
     }
 
     void CreateNewNote()
@@ -198,7 +230,7 @@ public class NoteboardManager : MonoBehaviour
             if (falseNote.strumDirection == -1)
             {
                 Vector3 newPos = falseNote.transform.localPosition;
-                newPos.y = farSpawn.transform.localPosition.y + (float)4.88;
+                newPos.y = farSpawn.transform.localPosition.y + rotator.transform.localPosition.y;
                 falseNote.transform.localPosition = newPos;
             }
         }
@@ -213,7 +245,7 @@ public class NoteboardManager : MonoBehaviour
             if (falseNote.strumDirection == 1)
             {
                 Vector3 newPos = falseNote.transform.localPosition;
-                newPos.y = closeSpawn.transform.localPosition.y + (float)4.88;
+                newPos.y = closeSpawn.transform.localPosition.y + rotator.transform.localPosition.y;
                 falseNote.transform.localPosition = newPos;
             }
         }

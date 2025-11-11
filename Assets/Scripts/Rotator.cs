@@ -6,6 +6,6 @@ public class Rotator : MonoBehaviour
 
     private void FixedUpdate()
     {
-        this.transform.Rotate(0, -rotateSpeed * Time.deltaTime, 0);
+        this.transform.Rotate(0, -rotateSpeed * Time.fixedDeltaTime, 0);
     }
 }
