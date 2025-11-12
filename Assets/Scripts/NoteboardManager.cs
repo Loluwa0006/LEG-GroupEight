@@ -29,18 +29,6 @@ public class NoteboardManager : MonoBehaviour
     [SerializeField] Transform rotator;
 
 
-
-    [Header("Default Note")]
-    [SerializeField] float defaultNoteMinCooldown = 0.1f;
-    [SerializeField] float defaultNoteMaxCooldown = 0.2f;
-
-    [Header("False Note")]
-    [SerializeField] float falseNoteMinCooldown = 0.6f;
-    [SerializeField] float falseNoteMaxCooldown = 0.7f;
-
-    float baseNotecooldownTracker = 0.0f;
-    float falseNoteCooldownTracker = 0.0f;
-
     [SerializeField] float audioStartDelayInSeconds;
     [SerializeField] float bpm;
     Queue<float> noteValuesInQuarterNotes = new Queue<float>(new[] { 1f, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 2 });
@@ -49,8 +37,7 @@ public class NoteboardManager : MonoBehaviour
     float spawnCooldown = 0f;
     AudioSource audioSource;
 
-    int score = 0;
-    int streak = 0;
+
 
     private void Awake()
     {
@@ -84,23 +71,6 @@ public class NoteboardManager : MonoBehaviour
 
     private void Update()
     {
-        /*
-        if (baseNotecooldownTracker <= 0.0f)
-        {
-            baseNotecooldownTracker = Random.Range(defaultNoteMinCooldown, defaultNoteMaxCooldown);
-            CreateNewNote();
-        }
-        if (falseNoteCooldownTracker <= 0.0f)
-        {
-            falseNoteCooldownTracker = Random.Range(falseNoteMinCooldown, falseNoteMaxCooldown);
-            CreateNewFalseNote();
-            Debug.Log("making false note");
-        }
-
-        baseNotecooldownTracker -= Time.deltaTime;
-        falseNoteCooldownTracker -= Time.deltaTime;
-        */
-
         spawnCooldown -= Time.deltaTime;
 
         if (spawnCooldown <= 0f)
@@ -132,34 +102,6 @@ public class NoteboardManager : MonoBehaviour
         newNote.Drop(spawnPos);
         newNote.transform.SetLocalPositionAndRotation(newNote.transform.localPosition, Quaternion.Euler(0, rotator.localEulerAngles.y, 0));
     }
-
-    void CreateNewFalseNote()
-    {
-        int columnCount = numberOfColumns - 1;
-        if (columnCount == 0) columnCount = 1; //can't divide by 0
-        float distanceBetweenColumns = (1.0f / columnCount);
-        int dir = Random.Range(0, 2);
-        Vector3 spawnPos;
-        int strumDir;
-        if (dir == 1)
-        {
-            spawnPos = Vector3.LerpUnclamped(farSpawn.position, closeSpawn.position, -0.25f);
-            strumDir = -1;
-        }
-        else
-        {
-            spawnPos = Vector3.LerpUnclamped(farSpawn.position, closeSpawn.position, 1.25f);
-            strumDir = 1;
-
-        }
-        FalseNoteEntity falseNote = Instantiate(falseNotePrefab, staff);
-        falseNote.transform.position = spawnPos;
-        falseNote.Drop(spawnPos);
-        activeFalseNotes.Add(falseNote);
-        falseNote.strumDirection = strumDir;
-        falseNote.transform.SetLocalPositionAndRotation(falseNote.transform.localPosition, Quaternion.Euler(0, rotator.localEulerAngles.y, 0));
-    }
-
     public void OnNoteFailed(NoteEntity note)
     {
         ResetNote(note);
@@ -197,9 +139,6 @@ public class NoteboardManager : MonoBehaviour
         noteList.Enqueue(note);
         note.gameObject.SetActive(false);
     }
-
-
-
     public void StrumLeft()
     {
         Debug.Log("Strumming Left");
