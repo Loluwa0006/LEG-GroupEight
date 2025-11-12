@@ -1,14 +1,18 @@
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 public class NoteClearer : MonoBehaviour
 {
+
+    public UnityEvent<NoteClearer> onFailedPlay = new();
 
     [SerializeField] NoteboardManager manager;
     [SerializeField] Collider detector;
     [SerializeField] MeshRenderer mesh;
     [SerializeField] ParticleSystem perfectPlayParticles;
     [SerializeField] PlayerInput playerInput;
+    [SerializeField] TrailRenderer lineRenderer;
 
     InputAction button;
 
@@ -17,13 +21,17 @@ public class NoteClearer : MonoBehaviour
     //Using ints to measure by frame for precision
     [SerializeField] int perfectDuration = 8;
     [SerializeField] int perfectCooldown = 45; // to prevent mashing
+    [SerializeField] int failureWindow = 45;
+    
 
     int perfectPlayTracker = 0;
     int cooldownTracker = 0;
+    int failureTracker = 0;
     int index = 0;
 
     bool playing = false;
     bool playedNotePerfectly = false;
+    bool playedNoteBeforeFailureWindow = false;
 
     private void Awake()
     {
@@ -41,11 +49,18 @@ public class NoteClearer : MonoBehaviour
         {
             playerInput = GetComponent<PlayerInput>();
         }
+        if (lineRenderer == null)
+        {
+            lineRenderer = GetComponentInChildren<TrailRenderer>();
+        }
+        lineRenderer.enabled = false;
         var main = perfectPlayParticles.main;
 
         main.loop = false;
 
         perfectPlayParticles.Stop();
+
+        mesh.enabled = false;
     }
 
     public void InitClearer(NoteboardManager manager, int index)
@@ -99,7 +114,10 @@ public class NoteClearer : MonoBehaviour
             {
                 Debug.Log("Played note normally");
                 manager.OnNoteSuccessful(note, false);
-
+            }
+            if (failureTracker > 0)
+            {
+                playedNoteBeforeFailureWindow = true;
             }
         }
     }
@@ -138,21 +156,30 @@ public class NoteClearer : MonoBehaviour
         {
             cooldownTracker--;
         }
+        if (failureTracker > 0)
+        {
+            failureTracker--;
+        }
     }
 
     void OnButtonDown()
     {
         playing = true;
-        mesh.enabled = false;
+        mesh.enabled = true;
         perfectPlayTracker = perfectDuration;
+        failureTracker = failureWindow;
+        lineRenderer.enabled = true;
+        playedNoteBeforeFailureWindow = false;
     }
 
     void OnButtonReleased()
     {
-        mesh.enabled = true;
+        mesh.enabled = false;
         playing = false;
         if (!playedNotePerfectly) cooldownTracker = perfectCooldown;
         playedNotePerfectly = false;
+        if (!playedNoteBeforeFailureWindow) onFailedPlay.Invoke(this);
+        lineRenderer.enabled = false;
     }
 
     public bool PlayedPerfect()
