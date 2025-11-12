@@ -153,7 +153,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3228577791779947101, guid: 5b3e8905b4c8acd44b6d438bb3e9f63b, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
-      value: NoteSpawningAndCameraMovement
+      value: Song2
       objectReference: {fileID: 0}
     - target: {fileID: 3228577791779947101, guid: 5b3e8905b4c8acd44b6d438bb3e9f63b, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
@@ -1214,7 +1214,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3228577791779947101, guid: 5b3e8905b4c8acd44b6d438bb3e9f63b, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
-      value: NoteSpawningAndCameraMovement
+      value: Song1
       objectReference: {fileID: 0}
     - target: {fileID: 3228577791779947101, guid: 5b3e8905b4c8acd44b6d438bb3e9f63b, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
