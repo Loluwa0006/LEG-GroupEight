@@ -2,14 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEditor.ShaderGraph.Serialization;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 
 
 public class NoteboardManager : MonoBehaviour
 {
 
-    public const int NOTE_POOL_SIZE = 25;
+    public const int NOTE_POOL_SIZE = 40;
 
     [SerializeField] int numberOfColumns = 4;
     [Header("Prefabs")]
@@ -40,15 +42,147 @@ public class NoteboardManager : MonoBehaviour
     [SerializeField] float falseNoteMinCooldown = 0.6f;
     [SerializeField] float falseNoteMaxCooldown = 0.7f;
 
+    /*
     float baseNotecooldownTracker = 0.0f;
     float falseNoteCooldownTracker = 0.0f;
+    */
 
     [SerializeField] float audioStartDelayInSeconds;
-    [SerializeField] float bpm;
-    Queue<float> noteValuesInQuarterNotes = new Queue<float>(new[] { 1f, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 2 });
+    [SerializeField] double bpm;
+    [SerializeField] bool Song1 = true;
+    Queue<float> noteValues;
+    Queue<float> noteValuesInQuarterNotesSong1 = new Queue<float>(new[] { 
+        1f, 0.5f, 0.5f, 1, 1,  
+        1, 1, 1, 1, 
+        1, 1, 1, 0.5f, 0.5f, 
+        0.5f, 0.5f, 1, 1, 1, 
+        1, 1, 1, 1, 
+        1, 1, 1, 1, 
+        1, 1, 0.5f, 0.5f, 0.5f, 0.5f, 
+        0.5f, 0.5f, 1, 1, 0.5f, 0.5f, 
+        1, 1, 1, 1, 
+        1, 0.5f, 0.5f, 0.5f, 0.5f, 1, 
+        1, 1, 0.5f, 0.5f, 0.5f, 0.5f, 
+        0.5f, 0.5f, 1, 1, 1, 
+        1, 1, 0.5f, 0.5f, 1, 
+        1, 1, 1, 1, 
+        1, 1, 0.5f, 0.5f, 0.5f, 0.5f, 
+        0.5f, 0.5f, 1, 1, 0.5f, 0.5f, 
+        0.5f, 1, 0.5f, 1, 
+        1, 1, 0.5f, 0.5f, 0.5f, 0.5f, 
+        0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 
+        0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 
+        0.5f, 0.5f, 0.5f, 1, 0.5f, 1, 
+        1, 1, 0.5f, 0.5f, 0.5f, 0.5f, 
+        0.5f, 0.5f, 1, 0.5f, 0.5f, 0.5f, 0.5f, 
+        1, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 
+        1, 0.5f, 0.5f, 0.5f, 1, 0.5f,  // 0:41
+        1, 0.5f, 0.5f, 1, 0.5f, 0.5f, 
+        1, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 
+        1, 0.5f, 0.5f, 1, 0.5f, 0.5f, 
+        1, 0.5f, 1, 0.5f, 0.5f, 0.5f, 
+        1, 0.5f, 0.5f, 1, 0.5f, 0.5f, 
+        1, 1, 0.5f, 0.5f, 0.5f, 1, 
+        0.5f, 1, 1, 0.5f, 1, 
+        0.5f, 0.5f, 1, 0.5f, 1, 1, 
+        1, 1, 0.5f, 0.5f, 1, 
+        1, 0.5f, 0.5f, 1, 0.5f, 0.5f, 
+        0.5f, 0.5f, 1, 0.5f, 0.5f, 0.5f, 0.5f, 
+        1, 0.5f, 0.5f, 0.5f, 1, 0.5f, 
+        0.5f, 0.5f, 1, 0.5f, 0.5f, 1, 
+        1, 0.5f, 1, 0.5f, 0.5f, 0.5f, 
+        0.5f, 0.5f, 1, 0.5f, 0.5f, 0.5f, 0.5f, 
+        0.5f, 1, 0.5f, 1, 1,  // 1:07
+        1, 0.5f, 0.5f, 0.5f, 0.5f, 1, 
+        1, 0.5f, 0.5f, 1, 0.5f, 0.5f,   // 1:12 second last 0.5 cymbals
+        0.5f, 0.5f, 1, 0.5f, 0.5f, 1, 
+        1, 0.5f, 0.5f, 0.5f, 1, 0.5f, 
+        0.5f, 0.5f, 1, 0.5f, 0.5f, 1, 
+        1, 0.5f, 0.5f, 1, 0.5f, 0.5f, 
+        0.5f, 0.5f, 1, 1, 0.5f, 0.5f, 
+        0.5f, 1, 0.5f, 1, 1, // 1:21
+        1, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 
+        0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 
+        0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 1, 
+        1, 1, 1, 1, 
+        1, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 
+        0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 1,
+        0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 
+        0.5f, 0.5f, 0.5f, 1, 0.5f, 1, // 1:35
+        0.5f, 0.5f, 1, 0.5f, 0.5f, 0.5f, 0.5f, 
+        0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 
+        0.5f, 0.5f, 1, 0.5f, 0.5f, 1, 
+        1, 0.5f, 0.5f, 0.5f, 0.5f, 1,
+        0.5f, 0.5f, 1, 0.5f, 0.5f, 0.5f, 0.5f, 
+        1, 0.5f, 0.5f, 0.5f, 1, 0.5f, 1,
+        1, 0.5f, 0.5f, 1
+    });
+
+    Queue<float> noteValuesInQuarterNotesSong2 = new Queue<float>(new[] {
+        1f, 1, 1, 1, 
+        1, 1, 1, 1, 
+        1, 1, 1, 1, 
+        1, 1, 1, 0.5f, 0.5f, 
+        1, 1, 1, 1, 
+        1, 1, 1, 1, 
+        1, 1, 1, 1, 
+        1, 1, 1, 0.5f, 0.5f, 
+        4,
+        4,
+        4, 
+        4, 
+        4, 
+        4, 
+        4, 
+        4, 
+        1, 1, 1, 1, 
+        1, 1, 1, 1, 
+        1, 1, 1, 1, 
+        1, 1, 1, 1, 
+        0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f,
+        0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f,
+        0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f,
+        0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f,
+        0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f,
+        0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f,
+        0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f,
+        0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f,
+        1, 1, 1, 1, 
+        1, 1, 1, 1, 
+        1, 0.5f, 0.5f, 1, 1, 
+        0.5f, 0.5f, 1, 1, 0.5f, 0.5f, 
+        1, 1, 1, 1, 
+        1, 1, 1, 1, 
+        1, 1, 1, 1, 
+        1, 0.5f, 0.5f, 0.5f, 0.5f, 1, 
+        1, 1, 1, 1, 
+        1, 1, 1, 1, 
+        1, 1, 1, 1, 
+        1, 1, 1, 1, 
+        1, 1, 1, 1, 
+        1, 1, 1, 1, 
+        1, 1, 1, 1, 
+        1, 1, 1, 1,
+        0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f,
+        0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f,
+        0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f,
+        0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f,
+        0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f,
+        0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f,
+        0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f,
+        0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f,
+        1, 1, 1, 1, 
+        1, 1, 1, 1, 
+        1, 1, 1, 1, 
+        1, 1, 1, 1,
+        1, 1, 1, 1,
+        1, 1, 1, 1,
+        1, 1, 1, 1,
+        0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f
+    });
     Queue<NoteEntity> noteList = new();
     List<FalseNoteEntity> activeFalseNotes = new();
-    float spawnCooldown = 0f;
+    double spawnCooldown = 0f;
     AudioSource audioSource;
 
     int score = 0;
@@ -68,7 +202,6 @@ public class NoteboardManager : MonoBehaviour
 
         for (int i = 0; i < numberOfColumns; i++)
         {
-            Debug.Log($"Loop {i} in clearerspawner");
             NoteClearer newClearer = Instantiate(clearerPrefab, clearerRotator);
             newClearer.InitClearer(this, i);
             float lerpAmount = distanceBetweenColumns * i;
@@ -81,6 +214,15 @@ public class NoteboardManager : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
 
         StartCoroutine(audioStartDelay());
+
+        if (Song1)
+        {
+            noteValues = noteValuesInQuarterNotesSong1;
+        }
+        else
+        {
+            noteValues = noteValuesInQuarterNotesSong2;
+        }
     }
 
     private void Update()
@@ -102,14 +244,19 @@ public class NoteboardManager : MonoBehaviour
         falseNoteCooldownTracker -= Time.deltaTime;
         */
 
+        
         spawnCooldown -= Time.deltaTime;
 
         if (spawnCooldown <= 0f)
         {
-            if (noteValuesInQuarterNotes.Count > 0)
+            if (noteValues.Count > 0)
             {
-                CreateNewNote();
-                spawnCooldown = 60 / bpm * noteValuesInQuarterNotes.Dequeue();
+                spawnCooldown = 60 / bpm * noteValues.Dequeue();
+                GenerateRandomNote();
+            }
+            else
+            {
+                // go to main menu /////////////////////////////
             }
         }
     }
@@ -118,6 +265,19 @@ public class NoteboardManager : MonoBehaviour
     {
         yield return new WaitForSeconds(audioStartDelayInSeconds);
         audioSource.Play();
+    }
+
+    void GenerateRandomNote()
+    {
+        int tempNum = Random.Range(0,10);
+        if (tempNum <= 8)
+        {
+            CreateNewNote();
+        }
+        else
+        {
+            CreateNewFalseNote();
+        }
     }
 
     void CreateNewNote()
@@ -164,7 +324,6 @@ public class NoteboardManager : MonoBehaviour
     public void OnNoteFailed(NoteEntity note)
     {
         UpdateStreak(true);
-        ResetNote(note);
         uiManager.OnNoteMissed(note);
         if (note.TryGetComponent(out FalseNoteEntity falseNote))
         {
@@ -174,13 +333,16 @@ public class NoteboardManager : MonoBehaviour
                 Destroy(falseNote.gameObject);
             }
         }
+        else
+        {
+            ResetNote(note);
+        }
     }
 
     public void OnNoteSuccessful(NoteEntity note, bool isPerfect)
     {
         UpdateScore(note.value);
         UpdateStreak(false);
-        ResetNote(note);
         uiManager.OnNotePlayed(note, isPerfect);
 
 
@@ -191,6 +353,10 @@ public class NoteboardManager : MonoBehaviour
                 activeFalseNotes.Remove(falseNote);
                 Destroy(falseNote.gameObject);
             }
+        }
+        else
+        {
+            ResetNote(note);
         }
     }
 

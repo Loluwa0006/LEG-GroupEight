@@ -1939,8 +1939,9 @@ MonoBehaviour:
   defaultNoteMaxCooldown: 0.6
   falseNoteMinCooldown: 0.6
   falseNoteMaxCooldown: 0.7
-  audioStartDelayInSeconds: 5.35
-  bpm: 142
+  audioStartDelayInSeconds: 4.56
+  bpm: 161.7
+  Song1: 0
 --- !u!82 &1732062558
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1952,9 +1953,9 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 8300000, guid: 99cd9d3e1c9f64d478ac5f8e51e8b567, type: 3}
+  m_Resource: {fileID: 8300000, guid: 8aabe6e3a96b36748b1ea61f4f269b47, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.08
+  m_Volume: 0.152
   m_Pitch: 1
   Loop: 0
   Mute: 0

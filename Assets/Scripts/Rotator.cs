@@ -2,10 +2,17 @@ using UnityEngine;
 
 public class Rotator : MonoBehaviour
 {
-    [SerializeField] int rotateSpeed;
+    [SerializeField] float rotateSpeed;
 
+    /*
     private void FixedUpdate()
     {
-        this.transform.Rotate(0, -rotateSpeed * Time.fixedDeltaTime, 0);
+        this.transform.Rotate(0, -rotateSpeed, 0);
+    }
+    */
+
+    private void Update()
+    {
+        this.transform.Rotate(0, -rotateSpeed * Time.deltaTime, 0);
     }
 }
